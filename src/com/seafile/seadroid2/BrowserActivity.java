@@ -48,7 +48,9 @@ import com.seafile.seadroid2.data.SeafRepo;
 import com.seafile.seadroid2.gallery.MultipleImageSelectionActivity;
 import com.seafile.seadroid2.ui.ActivitiesFragment;
 import com.seafile.seadroid2.ui.AppChoiceDialog;
+import com.seafile.seadroid2.ui.AppChoiceDialog.CustomAction;
 import com.seafile.seadroid2.ui.FetchFileDialog;
+import com.seafile.seadroid2.ui.GetShareLinkDialog;
 import com.seafile.seadroid2.ui.NewDirDialog;
 import com.seafile.seadroid2.ui.NewFileDialog;
 import com.seafile.seadroid2.ui.PasswordDialog;
@@ -816,7 +818,10 @@ public class BrowserActivity extends SherlockFragmentActivity
         }
 
         AppChoiceDialog dialog = new AppChoiceDialog();
-        dialog.init(infos, new AppChoiceDialog.OnAppSelectedListener() {
+        dialog.init(getString(R.string.export_file), infos, new AppChoiceDialog.OnItemSelectedListener() {
+            @Override
+            public void onCustomActionSelected(CustomAction action) {
+            }
             @Override
             public void onAppSelected(ResolveInfo appInfo) {
                 String className = appInfo.activityInfo.name;
@@ -857,24 +862,69 @@ public class BrowserActivity extends SherlockFragmentActivity
         fetchFileDialog.show(getSupportFragmentManager(), OPEN_FILE_DIALOG_FRAGMENT_TAG);
     }
 
-    // /**
-    //  * Share a file. Generating a file share link and send the link to someone
-    //  * through some app.
-    //  * @param fileName
-    //  */
-    // public void shareFile(String fileName) {
-    //     // TODO: share a file
-    //     // String repoID = navContext.getRepoID();
-    //     // String dirPath = navContext.getDirPath();
-    // }
+    /**
+     * Share a file. Generating a file share link and send the link to someone
+     * through some app.
+     * @param fileName
+     */
+    public void shareFile(String repoID, String path) {
+        chooseShareApp(repoID, path, false);
+    }
 
-    // public void shareDir(String dirName) {
-    //     // TODO: share a dir
-    //     // String repoID = navContext.getRepoID();
-    //     // String dirPath = navContext.getDirPath();
-    //     // Log.d(DEBUG_TAG, "sharing dir: " + dirName);
-    // }
+    public void shareDir(String repoID, String path) {
+        chooseShareApp(repoID, path, true);
+    }
 
+    private void chooseShareApp(final String repoID, final String path, final boolean isdir) {
+        final Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.setType("text/plain");
+
+        // Get a list of apps
+        PackageManager pm = getPackageManager();
+        List<ResolveInfo> infos = pm.queryIntentActivities(sendIntent, 0);
+
+        // Remove seafile app from the list
+        String seadroidPackageName = getPackageName();
+        ResolveInfo info;
+        Iterator<ResolveInfo> iter = infos.iterator();
+        while (iter.hasNext()) {
+            info = iter.next();
+            if (info.activityInfo.packageName.equals(seadroidPackageName)) {
+                iter.remove();
+            }
+        }
+
+        String title = getString(isdir ? R.string.share_dir_link : R.string.share_file_link);
+
+        AppChoiceDialog dialog = new AppChoiceDialog();
+        dialog.addCustomAction(0, getResources().getDrawable(R.drawable.copy_link),
+                               getString(R.string.copy_link));
+        dialog.init(title, infos, new AppChoiceDialog.OnItemSelectedListener() {
+            @Override
+            public void onCustomActionSelected(CustomAction action) {
+                // TODO: generate a share link through SeafConnection and copy
+                // it to clipboard
+                GetShareLinkDialog gdialog = new GetShareLinkDialog();
+                gdialog.init(repoID, path, isdir, account);
+                gdialog.show(getSupportFragmentManager(), "DialogFragment");
+            }
+            @Override
+            public void onAppSelected(ResolveInfo appInfo) {
+                String className = appInfo.activityInfo.name;
+                String packageName = appInfo.activityInfo.packageName;
+                sendIntent.setClassName(packageName, className);
+
+                // TODO: generate a share link through SeafConnection and
+                // fill, start the intent
+                GetShareLinkDialog gdialog = new GetShareLinkDialog();
+                gdialog.init(repoID, path, isdir, account);
+                gdialog.show(getSupportFragmentManager(), "DialogFragment");
+            }
+
+        });
+        dialog.show(getSupportFragmentManager(), CHOOSE_APP_DIALOG_FRAGMENT_TAG);
+    }
 
     private void onFileUploadProgress(int taskID) {
         if (txService == null) {

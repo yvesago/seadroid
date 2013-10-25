@@ -771,4 +771,8 @@ public class SeafConnection {
             return "the upload/download task has been cancelled";
         }
     }
+
+    public String getShareLink(String repoID, String path, boolean isdir) throws SeafException {
+        return "http://baidu.com";
+    }
 }
