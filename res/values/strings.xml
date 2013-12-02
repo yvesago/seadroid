@@ -4,9 +4,13 @@
     <string name="app_url">http://seafile.com</string>
     <string name="welcome_to_seafile">Welcome to Seafile</string>
     <string name="select_account">Choose an account to start</string>
+    <string name="edit_account">Edit</string>
+    <string name="delete_account">Delete</string>
+    <string name="delete">Delete</string>
     <string name="server_hint">Server, like cloud.seafile.com</string>
     <string name="email_hint">Email</string>
     <string name="passwd_hint">Password</string>
+    <string name="login">Login</string>
     <string name="open_file">Open</string>
     <string name="download_file">Download</string>
     <string name="redownload_file">Download again</string>
