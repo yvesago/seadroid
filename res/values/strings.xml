@@ -94,6 +94,7 @@
     <string name="download">Download</string>
     <string name="open">Open</string>
     <string name="last_modified">last modified</string>
+    <string name="file_modified">modified</string>
     <string name="file_size">file size</string>
     <string name="library_not_found">The library have been deleted.</string>
     <string name="export_file">Export this file</string>
@@ -107,4 +108,10 @@
     <string name="rename_file">Rename file</string>
     <string name="rename_dir">Rename folder</string>
     <string name="rename_successful">Renamed successfully.</string>
+    <string name="provide_password">Provide the password for library \"%s\"</string>
+    <string name="upload_waiting">Waiting</string>
+    <string name="upload_finished">Finished</string>
+    <string name="upload_cancelled">Cancelled</string>
+    <string name="upload_failed">Failed</string>
+    <string name="just_now">Just now</string>
 </resources>

@@ -4,8 +4,8 @@
     <string name="app_url">http://seafile.com</string>
     <string name="welcome_to_seafile">欢迎使用Seafile</string>
     <string name="select_account">请选择一个账户开始使用</string>
-    <string name="edit_account">编辑用户</string>
-    <string name="delete_account">删除用户</string>
+    <string name="edit_account">编辑帐户</string>
+    <string name="delete_account">删除帐户</string>
     <string name="server_hint">服务器地址, 比如cloud.seafile.com</string>
     <string name="email_hint">电子邮箱</string>
     <string name="passwd_hint">密码</string>
@@ -21,7 +21,7 @@
     <string name="add_account">添加账户</string>
     <string name="personal">个人</string>
     <string name="libraries">资料库</string>
-    <string name="cached">缓存</string>
+    <string name="cached">已缓存</string>
     <string name="upload_tasks">上传任务</string>
     <string name="activities">事件</string>
     <string name="ok">确定</string>
@@ -50,12 +50,12 @@
     <string name="download_failed">下载失败</string>
     <string name="trust_https_server">此证书不是由受信任的组织颁发，要继续吗？</string>
     <string name="upload_to">上传至： </string>
-    <string name="task_cancel">取消</string>
-    <string name="task_retry">重试</string>
+    <string name="task_cancel">取消上传</string>
+    <string name="task_retry">重新上传</string>
     <string name="task_remove">移除</string>
-    <string name="task_remove_all_finished">所有任务移除成功</string>
+    <string name="task_remove_all_finished">移除所有任务</string>
     <string name="file_action_download">下载</string>
-    <string name="file_action_remove_cache">清楚缓存</string>
+    <string name="file_action_remove_cache">清除缓存</string>
     <string name="file_action_update">上传</string>
     <string name="file_action_share">分享</string>
     <string name="file_action_export">导出</string>
@@ -93,6 +93,7 @@
     <string name="download">下载</string>
     <string name="open">打开</string>
     <string name="last_modified">最后更改</string>
+    <string name="file_modified">已更改</string>
     <string name="file_size">文件大小</string>
     <string name="library_not_found">此资料库已被删除。</string>
     <string name="export_file">导出此文件</string>
@@ -105,5 +106,11 @@
     <string name="link_ready_to_be_pasted">此链接已被复制到剪贴板。</string>
     <string name="rename_file">重命名文件</string>
     <string name="rename_dir">重命名文件夹</string>
-    <string name="rename_successful">重命名成功。</string>    
+    <string name="rename_successful">重命名成功。</string>
+    <string name="provide_password">请提供资料库\"%s\"的密码</string>
+    <string name="upload_waiting">等待中. . .</string>
+    <string name="upload_finished">已完成</string>
+    <string name="upload_cancelled">已取消</string>
+    <string name="upload_failed">上传失败</string>
+    <string name="just_now">刚刚更新</string>    
 </resources>
