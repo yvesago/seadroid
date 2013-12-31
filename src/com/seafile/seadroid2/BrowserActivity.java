@@ -288,8 +288,8 @@ public class BrowserActivity extends SherlockFragmentActivity
         if (savedInstanceState == null) {
         	tabsFragment = new TabsFragment();
         	uploadTasksFragment = new UploadTasksFragment();
-        	getSupportFragmentManager().beginTransaction().add(R.id.content_frame, tabsFragment, TABS_FRAGMENT_TAG);
-        	getSupportFragmentManager().beginTransaction().attach(tabsFragment);
+        	getSupportFragmentManager().beginTransaction().add(R.id.content_frame, tabsFragment, TABS_FRAGMENT_TAG).commit();
+        	getSupportFragmentManager().beginTransaction().add(android.R.id.content, uploadTasksFragment, UPLOAD_TASKS_FRAGMENT_TAG);
             //getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, tabsFragment).commit();
         }
         
@@ -423,7 +423,13 @@ public class BrowserActivity extends SherlockFragmentActivity
     private void selectItem(int position) {
         switch (position) {
         case 0 :
-        	getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, uploadTasksFragment).commit();
+            getSupportFragmentManager().beginTransaction().detach(tabsFragment).commit();
+            if (uploadTasksFragment == null) {
+                uploadTasksFragment = new UploadTasksFragment();
+                getSupportFragmentManager().beginTransaction().add(android.R.id.content, uploadTasksFragment, UPLOAD_TASKS_FRAGMENT_TAG).commit(); 
+            } else {
+                getSupportFragmentManager().beginTransaction().attach(uploadTasksFragment).commit();
+            }
         	currentSelectedItem = UPLOAD_TASKS_TAB;
         	break;
         case 1 :
