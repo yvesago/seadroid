@@ -101,6 +101,7 @@ public class BrowserActivity extends SherlockFragmentActivity
     UploadTasksFragment uploadTasksFragment = null;
     TabsFragment tabsFragment = null;
     private String currentSelectedItem = LIBRARY_TAB;
+    private boolean isAccountClicked = false;
 
     FetchFileDialog fetchFileDialog = null;
 
@@ -218,9 +219,9 @@ public class BrowserActivity extends SherlockFragmentActivity
         unsetRefreshing();
 
         if (savedInstanceState != null) {
-        	tabsFragment = (TabsFragment)
-        			getSupportFragmentManager().findFragmentByTag(TABS_FRAGMENT_TAG);
-        	uploadTasksFragment = (UploadTasksFragment)
+            tabsFragment = (TabsFragment)
+                    getSupportFragmentManager().findFragmentByTag(TABS_FRAGMENT_TAG);
+            uploadTasksFragment = (UploadTasksFragment)
                     getSupportFragmentManager().findFragmentByTag(UPLOAD_TASKS_FRAGMENT_TAG);
         	
             fetchFileDialog = (FetchFileDialog)
@@ -289,8 +290,9 @@ public class BrowserActivity extends SherlockFragmentActivity
         	tabsFragment = new TabsFragment();
         	uploadTasksFragment = new UploadTasksFragment();
         	getSupportFragmentManager().beginTransaction().add(R.id.content_frame, tabsFragment, TABS_FRAGMENT_TAG).commit();
-        	getSupportFragmentManager().beginTransaction().add(android.R.id.content, uploadTasksFragment, UPLOAD_TASKS_FRAGMENT_TAG);
-            //getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, tabsFragment).commit();
+        	getSupportFragmentManager().beginTransaction().add(R.id.content_frame, uploadTasksFragment, UPLOAD_TASKS_FRAGMENT_TAG).commit();
+        	getSupportFragmentManager().beginTransaction().detach(uploadTasksFragment).commit();
+        	//getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, tabsFragment).commit();
         }
         
         Intent txIntent = new Intent(this, TransferService.class);
@@ -370,8 +372,20 @@ public class BrowserActivity extends SherlockFragmentActivity
     @Override
     protected void onNewIntent(Intent intent) {
         Log.d(DEBUG_TAG, "onNewIntent");
+        isAccountClicked = intent.getBooleanExtra("isAccountClicked", false);
     }
 
+    @Override
+    public void onPostResume() {
+        super.onPostResume();
+        if(isAccountClicked) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.detach(uploadTasksFragment);
+            ft.attach(tabsFragment);
+            ft.commit();
+        }
+    }
+    
     @Override
     protected void onStop() {
         Log.d(DEBUG_TAG, "onStop");
@@ -423,13 +437,10 @@ public class BrowserActivity extends SherlockFragmentActivity
     private void selectItem(int position) {
         switch (position) {
         case 0 :
-            getSupportFragmentManager().beginTransaction().detach(tabsFragment).commit();
-            if (uploadTasksFragment == null) {
-                uploadTasksFragment = new UploadTasksFragment();
-                getSupportFragmentManager().beginTransaction().add(android.R.id.content, uploadTasksFragment, UPLOAD_TASKS_FRAGMENT_TAG).commit(); 
-            } else {
-                getSupportFragmentManager().beginTransaction().attach(uploadTasksFragment).commit();
-            }
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.detach(tabsFragment);
+            ft.attach(uploadTasksFragment);
+            ft.commit();
         	currentSelectedItem = UPLOAD_TASKS_TAB;
         	break;
         case 1 :
