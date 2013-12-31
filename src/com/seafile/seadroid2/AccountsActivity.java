@@ -95,6 +95,7 @@ public class AccountsActivity extends FragmentActivity {
         intent.putExtra("server", account.server);
         intent.putExtra("email", account.email);
         intent.putExtra("token", account.token);
+        intent.putExtra("isAccountClicked", true);
         startActivity(intent);
         finish();
     }

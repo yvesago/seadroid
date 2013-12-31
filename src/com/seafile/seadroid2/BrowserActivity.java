@@ -287,7 +287,10 @@ public class BrowserActivity extends SherlockFragmentActivity
 
         if (savedInstanceState == null) {
         	tabsFragment = new TabsFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, tabsFragment).commit();
+        	uploadTasksFragment = new UploadTasksFragment();
+        	getSupportFragmentManager().beginTransaction().add(R.id.content_frame, tabsFragment, TABS_FRAGMENT_TAG);
+        	getSupportFragmentManager().beginTransaction().attach(tabsFragment);
+            //getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, tabsFragment).commit();
         }
         
         Intent txIntent = new Intent(this, TransferService.class);
@@ -420,9 +423,6 @@ public class BrowserActivity extends SherlockFragmentActivity
     private void selectItem(int position) {
         switch (position) {
         case 0 :
-        	if (uploadTasksFragment == null) {
-        		uploadTasksFragment = new UploadTasksFragment();
-        	}
         	getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, uploadTasksFragment).commit();
         	currentSelectedItem = UPLOAD_TASKS_TAB;
         	break;
